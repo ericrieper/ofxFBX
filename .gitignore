@@ -18,4 +18,5 @@
 *.sln.docstates
 
 AutoDesk-Viewer/*
-fbxsdk_2015.1/
+*/fbxsdk_2015.1/*
+*/fbxsdk_2016.1/*
