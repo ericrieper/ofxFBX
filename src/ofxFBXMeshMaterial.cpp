@@ -31,7 +31,7 @@ void ofxFBXMeshMaterial::setup( const FbxSurfaceMaterial * pMaterial ) {
     }
     
     setEmissiveColor( tEmissive );
-    setAmbientColor( tAmbient );
+    setAmbientColor( ofColor::white );
     setDiffuseColor( tDiffuse );
     setSpecularColor( tSpecular );
     setShininess( shininess );
