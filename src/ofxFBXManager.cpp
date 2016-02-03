@@ -132,6 +132,9 @@ void ofxFBXManager::draw() {
 
 //--------------------------------------------------------------
 void ofxFBXManager::drawMeshes() {
+
+	calcNormals(true);
+
     vector< shared_ptr<ofxFBXMesh> > fbxMeshes = fbxScene->getMeshes();
     for(int i = 0; i < fbxMeshes.size(); i++ ) {
         meshTransforms[i].transformGL();
@@ -139,6 +142,43 @@ void ofxFBXManager::drawMeshes() {
         meshTransforms[i].restoreTransformGL();
     }
 }
+
+//--------------------------------------------------------------------------
+void ofxFBXManager::calcNormals(bool bNormalize) {
+
+	vector< shared_ptr<ofxFBXMesh> > fbxMeshes = fbxScene->getMeshes();
+	for (int m = 0; m < fbxMeshes.size(); m++) {
+		ofMesh & mesh = meshes[m];
+
+		mesh.clearNormals();
+
+		for (int i = 0; i < mesh.getVertices().size(); i++) mesh.addNormal(ofPoint(0, 0, 0));
+
+		for (int i = 0; i < mesh.getIndices().size(); i += 3) {
+			const int ia = mesh.getIndices()[i];
+			const int ib = mesh.getIndices()[i + 1];
+			const int ic = mesh.getIndices()[i + 2];
+
+			ofVec3f e1 = mesh.getVertices()[ia] - mesh.getVertices()[ib];
+			ofVec3f e2 = mesh.getVertices()[ic] - mesh.getVertices()[ib];
+			ofVec3f no = e2.cross(e1);
+
+			// depending on your clockwise / winding order, you might want to reverse the e2 / e1 above if your normals are flipped. 
+
+			mesh.getNormals()[ia] += no;
+			mesh.getNormals()[ib] += no;
+			mesh.getNormals()[ic] += no;
+		}
+
+		if (bNormalize)
+			for (int i = 0; i < mesh.getNormals().size(); i++) {
+				mesh.getNormals()[i].normalize();
+			}
+
+	}
+}
+
+
 
 //--------------------------------------------------------------
 void ofxFBXManager::drawMeshWireframes() {

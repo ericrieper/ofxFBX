@@ -20,6 +20,7 @@ public:
     void draw();
     void drawMeshes();
     void drawMeshWireframes();
+	void calcNormals(bool bNormalize);
     void drawMeshNormals( float aLen = 4.f, bool aBFaceNormals = true );
     void drawSkeletons( float aLen = 10.f, bool aBDrawAxes = true );
     
